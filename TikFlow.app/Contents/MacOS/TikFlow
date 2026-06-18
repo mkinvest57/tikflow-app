@@ -1,0 +1,90 @@
+#!/bin/bash
+# ═══════════════════════════════════════════════
+# TikFlow.app Launcher
+# Démarre le serveur Flask TikFlow + dashboard
+# ═══════════════════════════════════════════════
+
+APP_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+TIKFLOW_DIR="$HOME/Desktop/tiktokpublish/tiktok-automation"
+VENV_PYTHON="$TIKFLOW_DIR/venv/bin/python3"
+LOG_FILE="/tmp/tikflow.log"
+ERR_FILE="/tmp/tikflow.err"
+
+# Couleurs pour le terminal
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+PURPLE='\033[0;35m'
+NC='\033[0m'
+
+echo -e "${PURPLE}"
+echo "╔══════════════════════════════════╗"
+echo "║       🤖 TikFlow Launcher       ║"
+echo "║   TikTok Automation Pipeline    ║"
+echo "╚══════════════════════════════════╝"
+echo -e "${NC}"
+
+# Vérifier que le dossier TikFlow existe
+if [ ! -d "$TIKFLOW_DIR" ]; then
+    echo -e "${RED}❌ Dossier TikFlow introuvable : $TIKFLOW_DIR${NC}"
+    echo "Vérifie que le repo est cloné dans ~/Desktop/tiktokpublish/tiktok-automation/"
+    sleep 5
+    exit 1
+fi
+
+# Vérifier que le venv existe
+if [ ! -f "$VENV_PYTHON" ]; then
+    echo -e "${RED}❌ Environnement virtuel introuvable.${NC}"
+    echo "Lance ./install.sh d'abord pour configurer TikFlow."
+    sleep 5
+    exit 1
+fi
+
+# Tuer toute instance existante
+echo "🧹 Nettoyage des anciennes instances..."
+lsof -ti:5050 | xargs kill -9 2>/dev/null
+pkill -9 -f "playwright.*cli.js" 2>/dev/null
+sleep 1
+
+# Démarrer le serveur
+echo -e "${GREEN}🚀 Lancement de TikFlow...${NC}"
+cd "$TIKFLOW_DIR"
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+
+"$VENV_PYTHON" app.py > "$LOG_FILE" 2> "$ERR_FILE" &
+TIKFLOW_PID=$!
+
+sleep 2
+
+# Vérifier que le serveur répond
+if curl -s --max-time 5 http://localhost:5050/api/system/status > /dev/null 2>&1; then
+    echo -e "${GREEN}✅ TikFlow est lancé sur http://localhost:5050${NC}"
+else
+    echo -e "${RED}⚠️  TikFlow a démarré mais ne répond pas encore. Patiente...${NC}"
+    sleep 3
+fi
+
+# Ouvrir le dashboard dans le navigateur par défaut
+open "http://localhost:5050"
+
+# Garder le script en vie (sinon l'app se ferme)
+echo -e "${PURPLE}📊 Dashboard : http://localhost:5050${NC}"
+echo -e "${PURPLE}📋 Logs : $LOG_FILE${NC}"
+echo ""
+echo "Appuie sur Ctrl+C ou ferme cette fenêtre pour arrêter TikFlow."
+
+# Trap pour cleanup propre
+cleanup() {
+    echo ""
+    echo -e "${RED}🛑 Arrêt de TikFlow...${NC}"
+    kill $TIKFLOW_PID 2>/dev/null
+    lsof -ti:5050 | xargs kill -9 2>/dev/null
+    pkill -9 -f "playwright.*cli.js" 2>/dev/null
+    echo "✅ TikFlow arrêté."
+    exit 0
+}
+
+trap cleanup SIGINT SIGTERM
+
+# Attendre indéfiniment
+wait $TIKFLOW_PID

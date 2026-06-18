@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="200" fill="url(#bg)"/>
+  <!-- TikTok-style music note with T -->
+  <g transform="translate(512,480)">
+    <!-- Note stem -->
+    <rect x="60" y="-280" width="100" height="420" rx="30" fill="url(#accent)"/>
+    <!-- Note head -->
+    <circle cx="110" cy="200" r="130" fill="url(#accent)"/>
+    <!-- Smaller note -->
+    <rect x="260" y="-180" width="70" height="280" rx="25" fill="#c4b5fd" opacity="0.8"/>
+    <circle cx="295" cy="140" r="90" fill="#c4b5fd" opacity="0.8"/>
+    <!-- T letter overlay -->
+    <text x="-80" y="80" font-family="Inter,system-ui,sans-serif" font-size="280" font-weight="900" fill="white" text-anchor="middle">T</text>
+  </g>
+</svg>
