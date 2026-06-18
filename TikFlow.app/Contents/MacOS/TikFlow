@@ -1,6 +1,6 @@
 #!/bin/bash
 # ═══════════════════════════════════════════════
-# TikFlow.app Launcher v2 — Fenêtre native Swift
+# TikFlow.app Launcher v3
 # ═══════════════════════════════════════════════
 set -e
 
@@ -15,6 +15,19 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PAT
 lsof -ti:5050 | xargs kill -9 2>/dev/null || true
 pkill -9 -f "playwright.*cli.js" 2>/dev/null || true
 sleep 1
+
+# Vérifier que le code existe
+if [ ! -f "$TIKFLOW_DIR/app.py" ]; then
+    osascript -e 'display dialog "TikFlow n'\''est pas installé.\n\nLance install.sh depuis le DMG d'\''abord." buttons {"OK"} default button "OK" with icon stop'
+    exit 1
+fi
+
+# Créer le venv si absent
+if [ ! -f "$VENV_PYTHON" ]; then
+    echo "🐍 Création du venv..."
+    python3 -m venv "$TIKFLOW_DIR/venv"
+    "$TIKFLOW_DIR/venv/bin/pip" install flask yt-dlp python-dotenv requests -q
+fi
 
 # Démarrer le serveur Flask
 cd "$TIKFLOW_DIR"
@@ -33,12 +46,10 @@ done
 if [ -x "$SWIFT_WINDOW" ]; then
     "$SWIFT_WINDOW" &
     WINDOW_PID=$!
-    echo "📱 Fenêtre native TikFlow ouverte"
 else
     open "http://localhost:5050"
 fi
 
-# Cleanup
 cleanup() {
     kill $FLASK_PID 2>/dev/null || true
     kill $WINDOW_PID 2>/dev/null || true
