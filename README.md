@@ -1,54 +1,40 @@
 # 🤖 TikFlow — TikTok Automation Pipeline
 
-**Un pipeline TikTok 100% automatisé pour macOS.**  
+**Pipeline TikTok 100% automatisé pour macOS.**
+
 TikFlow scanne des chaînes YouTube, extrait les meilleurs moments, ajoute des sous-titres et hooks IA, puis publie automatiquement sur TikTok.
 
-## ⚡ Installation (30 secondes)
+## ⚡ Installation (one-liner)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/rayanmak/tikflow-app/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/mkinvest57/tikflow-app/main/install.sh | bash
 ```
 
-Ou télécharge la dernière version depuis les [Releases](https://github.com/rayanmak/tikflow-app/releases).
+Ça installe TOUT automatiquement : Homebrew, Python 3.12, FFmpeg, ImageMagick, dépendances Python, Chromium, et l'app dans /Applications.
 
-## 🎯 Ce que fait TikFlow
+Ou télécharge le **DMG** depuis les [Releases](https://github.com/mkinvest57/tikflow-app/releases).
 
-- 📡 **Scan** 10 chaînes YouTube gaming FR
-- 🎬 **Édite** des clips 65-90s (monétisables >1min)
-- 🧠 **Génère** des hooks viraux via IA
-- 📝 **Sous-titre** automatiquement (captions YouTube)
-- 🎮 **Gameplay** intelligent (évite les zones mortes)
-- 📤 **Publie** automatiquement sur TikTok
-- 📊 **Dashboard** web sur http://localhost:5050
+## 🎯 TikFlow v3
 
-## 🖥️ Dashboard
+- **Orb navigation** — boule en verre flottante, 3 pétales qui fleurissent sur un arc
+- **Panneaux rétractables** — clic sur le titre pour ouvrir/fermer
+- **Paramètres modifiables** — intervalle, durée, queue, vidéos/jour en live
+- **Chaînes YouTube** — ajout/suppression depuis le dashboard
+- **Notifications Telegram** — config intégrée avec bouton test
+- **Limite quotidienne** — VIDEOS_PER_DAY actif avec avertissement
+- **Design Apple blanc pur** — zéro sidebar, zéro bleu
 
-Une fois lancé, ouvre http://localhost:5050 pour :
-- Voir l'état du pipeline (factory, publisher, queue)
-- Forcer une publication
-- Voir les analytics (posts, succès, meilleurs horaires)
-- Gérer la file d'attente
+## 📊 Dashboard
 
-## 📦 Distribution
+http://localhost:5050
 
-Télécharge `TikFlow.dmg` depuis les [Releases](https://github.com/rayanmak/tikflow-app/releases), ouvre-le, et glisse TikFlow dans Applications.
-
-## 🔧 Développement
-
-```bash
-git clone https://github.com/rayanmak/tikflow-app.git
-cd tikflow-app
-./install.sh
-```
-
-## 📋 Requirements
+## 📦 Requirements (gérés automatiquement par install.sh)
 
 - macOS 13+
 - Python 3.11+
-- FFmpeg (`brew install ffmpeg`)
-- ImageMagick (`brew install imagemagick`)
-- Compte TikTok avec session cookie valide
+- FFmpeg, ImageMagick
+- Compte TikTok avec session cookie
 
 ## 🔒 Privacy
 
-TikFlow tourne 100% en local. Aucune donnée n'est envoyée à un serveur externe (sauf YouTube et TikTok pour les uploads).
+100% local. Aucune donnée externe (sauf YouTube et TikTok pour les uploads).
